@@ -70,7 +70,7 @@ public class GuessActivity extends AppCompatActivity {
         answers1.add(new Answer("Réponse 1A", true));
         answers1.add(new Answer("Réponse 1B", false));
         answers1.add(new Answer("Réponse 1C", false));
-        Question question1 = new Question("Question 1 ?", R.drawable.ic_launcher_background);
+        Question question1 = new Question("Question 1 ?", R.drawable.man);
         flashCards.add(new FlashCard(answers1, question1));
 
         // FlashCard 2
@@ -78,7 +78,7 @@ public class GuessActivity extends AppCompatActivity {
         answers2.add(new Answer("Réponse 2A", false));
         answers2.add(new Answer("Réponse 2B", true));
         answers2.add(new Answer("Réponse 2C", false));
-        Question question2 = new Question("Question 2 ?", R.drawable.ic_launcher_foreground);
+        Question question2 = new Question("Question 2 ?", R.drawable.coding);
         flashCards.add(new FlashCard(answers2, question2));
 
         // Ajouter autant de questions que tu veux ici
