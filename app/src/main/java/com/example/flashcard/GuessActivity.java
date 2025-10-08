@@ -41,7 +41,7 @@ public class GuessActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private int correctAnswersCount = 0;
     private String difficulty;
-
+    private ArrayList<FlashCard> wrongAnswers = new ArrayList<>();
 
 
 
@@ -68,6 +68,7 @@ public class GuessActivity extends AppCompatActivity {
         messageTextView = findViewById(R.id.messageTextView);
         answersRadioGroup = findViewById(R.id.radioGroup);
         progressBar = findViewById(R.id.progressBar);
+
 
 
         firstRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -178,6 +179,7 @@ public class GuessActivity extends AppCompatActivity {
             } else {
                 messageTextView.setText("Raté, la bonne réponse était : " +
                         flashCard.getAnswers().get(correctIndex).getAnswerText());
+                wrongAnswers.add(flashCard);
                 MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.wrong);
                 mediaPlayer.start();
             }
@@ -234,7 +236,9 @@ public class GuessActivity extends AppCompatActivity {
             intent.putExtra("resultPlayer", correctAnswersCount);
             intent.putExtra("totalQuestions", flashCards.size());
             intent.putExtra("difficulty", difficulty);
+            intent.putParcelableArrayListExtra("wrongAnswers", wrongAnswers);
             startActivity(intent);
+            finish();
         });
     }
 

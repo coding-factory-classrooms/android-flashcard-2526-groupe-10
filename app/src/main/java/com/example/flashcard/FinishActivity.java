@@ -1,6 +1,7 @@
 package com.example.flashcard;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,8 +12,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class FinishActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class FinishActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,24 @@ public class FinishActivity extends AppCompatActivity {
         int resultPlayer = srcIntent.getIntExtra("resultPlayer", 0);
         int totalQuestions = getIntent().getIntExtra("totalQuestions", 0);
         String choiceDifficulty = srcIntent.getStringExtra("difficulty");
+        ArrayList<FlashCard> wrongAnswers = getIntent().getParcelableArrayListExtra("wrongAnswers");
+
+        Button reviseButton = findViewById(R.id.reviseButton);
+        if (wrongAnswers == null || wrongAnswers.isEmpty()) {
+            reviseButton.setEnabled(false);
+            reviseButton.setBackgroundColor(Color.GRAY);
+        } else {
+            reviseButton.setEnabled(true);
+            reviseButton.setOnClickListener(v -> {
+                Intent intent = new Intent(FinishActivity.this, GuessActivity.class);
+                intent.putParcelableArrayListExtra("flashcards", wrongAnswers);
+                intent.putExtra("difficulty", getIntent().getStringExtra("difficulty"));
+                startActivity(intent);
+                finish();
+            });
+        }
+
+
 
         // Calcul le taux de reussite en %
         float pourcentage = ((float) resultPlayer / totalQuestions) * 100;
