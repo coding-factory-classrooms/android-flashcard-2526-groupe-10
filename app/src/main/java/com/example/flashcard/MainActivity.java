@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     // Lancer l'activité GuessActivity avec la liste
                     Intent intent = new Intent(MainActivity.this, GuessActivity.class);
                     intent.putParcelableArrayListExtra("flashcards", selectedList);
+                    intent.putExtra("difficulty", levels[which]);
                     startActivity(intent);
                 })
                 .setNegativeButton("Annuler", (dialog, which) -> dialog.dismiss())

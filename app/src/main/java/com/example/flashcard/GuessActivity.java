@@ -39,6 +39,10 @@ public class GuessActivity extends AppCompatActivity {
     private int currentQuestionIndex = 0;
     private boolean answered = false;
     private ProgressBar progressBar;
+    private int correctAnswersCount = 0;
+    private String difficulty;
+
+
 
 
     @Override
@@ -46,7 +50,8 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
-
+        //Recuperation du niveau de difficulte choisi
+        difficulty = getIntent().getStringExtra("difficulty");
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -168,6 +173,7 @@ public class GuessActivity extends AppCompatActivity {
                 messageTextView.setText("Bravo, c'était la bonne réponse !");
                 MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.correct);
                 mediaPlayer.start();
+                correctAnswersCount += 1;
 
             } else {
                 messageTextView.setText("Raté, la bonne réponse était : " +
@@ -219,11 +225,15 @@ public class GuessActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction qui permet de passer sur l'activité des résultats
+     * Fonction qui permet de passer sur l'activité des résultats et qui recupere les resultats, le total des questions,
+     * et le niveau de difficulté choisi
      */
     private void NavigateToFinish() {
         guessButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, FinishActivity.class);
+            intent.putExtra("resultPlayer", correctAnswersCount);
+            intent.putExtra("totalQuestions", flashCards.size());
+            intent.putExtra("difficulty", difficulty);
             startActivity(intent);
         });
     }
