@@ -1,5 +1,6 @@
 package com.example.flashcard;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -46,7 +47,6 @@ public class GuessActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
 
-        // Gestion des marges liées aux system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -191,7 +191,7 @@ public class GuessActivity extends AppCompatActivity {
                     // Si on est sur la dernière question
                     if (currentQuestionIndex == flashCards.size() - 1) {
                         guessButton.setText("Félicitations, vous avez terminé le quiz !");
-                        guessButton.setEnabled(false);
+                        NavigateToFinish();
                     } else {
                         guessButton.setText("Question suivante");
                     }
@@ -208,7 +208,6 @@ public class GuessActivity extends AppCompatActivity {
                 // L'utilisateur passe à la question suivante
                 currentQuestionIndex++;
 
-
                 if (currentQuestionIndex < flashCards.size()) {
                     createFlashCard(flashCards.get(currentQuestionIndex));
                     guessButton.setText("Valider réponse");
@@ -216,6 +215,16 @@ public class GuessActivity extends AppCompatActivity {
                     answered = false;
                 }
             }
+        });
+    }
+
+    /**
+     * Fonction qui permet de passer sur l'activité des résultats
+     */
+    private void NavigateToFinish() {
+        guessButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FinishActivity.class);
+            startActivity(intent);
         });
     }
 
