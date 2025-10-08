@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,20 +30,23 @@ public class MainActivity extends AppCompatActivity {
         // Initalise les flashcard afin de les envoyer
         initFlashCards();
 
-        Button playButton = findViewById(R.id.playButtonId);
+        //Bouton pour acceder a la page Guess
+        ImageButton playButton = findViewById(R.id.playButtonId);
         playButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, GuessActivity.class);
             intent.putParcelableArrayListExtra("flashcards", flashCards);
             startActivity(intent);
         });
 
-        Button listButton = findViewById(R.id.listButtonId);
+        //Bouton pour acceder a la liste des questions
+        ImageButton listButton = findViewById(R.id.listButtonId);
         listButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ListQuestionActivity.class);
             startActivity(intent);
         });
 
-        Button aboutButton = findViewById(R.id.aboutButtonId);
+        //Bouton pour acceder a la page about
+        ImageButton aboutButton = findViewById(R.id.aboutButtonId);
         aboutButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
