@@ -1,6 +1,8 @@
 package com.example.flashcard;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -27,9 +29,8 @@ public class GuessActivity extends AppCompatActivity {
     private TextView questionTextView;
     private TextView messageTextView;
     private RadioGroup answersRadioGroup;
-
-    private FlashCard flashCard;
     private List<FlashCard> flashCards;
+    private FlashCard flashCard;
     private int currentQuestionIndex = 0;
     private boolean answered = false; // pour savoir si la question a été répondue
 
@@ -46,6 +47,18 @@ public class GuessActivity extends AppCompatActivity {
             return insets;
         });
 
+
+        // Recevoir les flashcards
+        flashCards = getIntent().getParcelableArrayListExtra("flashcards");
+        currentQuestionIndex = 0;
+
+        if (flashCards != null && !flashCards.isEmpty()) {
+            createFlashCard(flashCards.get(currentQuestionIndex));
+        } else {
+            Log.e("GuessActivity", "Aucune flashcard reçue !");
+        }
+
+
         // Initialisation des boutons et TextViews
         firstRadioButton = findViewById(R.id.firstRadioButton);
         secondRadioButton = findViewById(R.id.secondRadioButton);
@@ -56,37 +69,27 @@ public class GuessActivity extends AppCompatActivity {
         messageTextView = findViewById(R.id.messageTextView);
         answersRadioGroup = findViewById(R.id.radioGroup);
 
+        firstRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) buttonView.setBackgroundColor(Color.parseColor("#BB9CFF"));
+            else buttonView.setBackgroundColor(Color.parseColor("#8B5CF6"));
+        });
+
+        secondRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) buttonView.setBackgroundColor(Color.parseColor("#FA6BB2"));
+            else buttonView.setBackgroundColor(Color.parseColor("#EC4899"));
+        });
+
+        thirdRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) buttonView.setBackgroundColor(Color.parseColor("#99C1FF"));
+            else buttonView.setBackgroundColor(Color.parseColor("#3B82F6"));
+        });
+
+
         // Créer les flashcards et afficher la première
-        initFlashCards();
         createFlashCard(flashCards.get(currentQuestionIndex));
 
         // Gestion du bouton Valider / Question suivante
         nextStep();
-    }
-
-    /**
-     * Fonction qui crée la liste des flashcards
-     */
-    public void initFlashCards() {
-        flashCards = new ArrayList<>();
-
-        // Exemple de FlashCard 1
-        ArrayList<Answer> answers1 = new ArrayList<>();
-        answers1.add(new Answer("Réponse 1A", true));
-        answers1.add(new Answer("Réponse 1B", false));
-        answers1.add(new Answer("Réponse 1C", false));
-        Question question1 = new Question("Question 1 ?", R.drawable.man);
-        flashCards.add(new FlashCard(answers1, question1));
-
-        // Exemple de FlashCard 2
-        ArrayList<Answer> answers2 = new ArrayList<>();
-        answers2.add(new Answer("Réponse 2A", false));
-        answers2.add(new Answer("Réponse 2B", true));
-        answers2.add(new Answer("Réponse 2C", false));
-        Question question2 = new Question("Question 2 ?", R.drawable.coding);
-        flashCards.add(new FlashCard(answers2, question2));
-
-
     }
 
     /**
@@ -115,7 +118,7 @@ public class GuessActivity extends AppCompatActivity {
     /**
      * Fonction qui regarde si la bonne réponse a été choisie afin d'afficher le message correspondant
      */
-    public void isSelect() {
+    public boolean isSelect() {
         RadioButton[] radioButtons = {firstRadioButton, secondRadioButton, thirdRadioButton};
         int index = -1;
 
@@ -130,6 +133,7 @@ public class GuessActivity extends AppCompatActivity {
         if (index == -1) {
             // aucun bouton n’est sélectionné
             messageTextView.setText("Il faut choisir une réponse !");
+            return false;
         } else {
             Answer answer = flashCard.getAnswers().get(index);
 
@@ -148,6 +152,7 @@ public class GuessActivity extends AppCompatActivity {
                 messageTextView.setText("Raté, la bonne réponse était : " +
                         flashCard.getAnswers().get(correctIndex).getAnswerText());
             }
+            return true;
         }
     }
 
@@ -158,9 +163,11 @@ public class GuessActivity extends AppCompatActivity {
         guessButton.setOnClickListener(v -> {
             if (!answered) {
                 // L'utilisateur valide sa réponse
-                isSelect(); // affiche "Bravo" ou "Raté"
-                guessButton.setText("Question suivante");
-                answered = true;
+                boolean hasAnswered = isSelect(); // affiche "Bravo" ou "Raté"
+                if (hasAnswered) { // Seulement si une réponse est cochée
+                    guessButton.setText("Question suivante");
+                    answered = true;
+                }
             } else {
                 // L'utilisateur passe à la question suivante
                 currentQuestionIndex++;
