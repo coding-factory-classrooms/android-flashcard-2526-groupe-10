@@ -1,0 +1,78 @@
+{
+  "easy": [
+    {
+      "questionText": "Qui est-ce ?",
+      "image": "easy_enrique",
+      "answers": [
+        { "answerText": "Enrique", "isCorrect": true },
+        { "answerText": "Raphael", "isCorrect": false },
+        { "answerText": "Clément", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette femme ?",
+      "image": "easy_siwar",
+      "answers": [
+        { "answerText": "Inès", "isCorrect": false },
+        { "answerText": "Siwar", "isCorrect": true },
+        { "answerText": "Noah", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "easy_romain",
+      "answers": [
+        { "answerText": "Théo", "isCorrect": false },
+        { "answerText": "Romain", "isCorrect": true },
+        { "answerText": "Nolhan", "isCorrect": false }
+      ]
+    }
+  ],
+  "medium": [
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "medium_antonin",
+      "answers": [
+        { "answerText": "Shayan", "isCorrect": false },
+        { "answerText": "Antonin", "isCorrect": true },
+        { "answerText": "Mael", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "medium_estelle",
+      "answers": [
+        { "answerText": "Badis", "isCorrect": false },
+        { "answerText": "Estelle", "isCorrect": true },
+        { "answerText": "Inès", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "medium_badis",
+      "answers": [
+        { "answerText": "Shayan", "isCorrect": false },
+        { "answerText": "Badis", "isCorrect": true },
+        { "answerText": "Nino", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "medium_ines",
+      "answers": [
+        { "answerText": "Siwar", "isCorrect": false },
+        { "answerText": "Inès", "isCorrect": true },
+        { "answerText": "Clément", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est cette personne ?",
+      "image": "medium_mathys",
+      "answers": [
+        { "answerText": "Lucas", "isCorrect": false },
+        { "answerText": "Mathys", "isCorrect": true },
+        { "answerText": "Matéis", "isCorrect": false }
+      ]
+    }
+  ]
+}
