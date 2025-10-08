@@ -1,10 +1,12 @@
 package com.example.flashcard;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,7 +34,9 @@ public class GuessActivity extends AppCompatActivity {
     private List<FlashCard> flashCards;
     private FlashCard flashCard;
     private int currentQuestionIndex = 0;
-    private boolean answered = false; // pour savoir si la question a été répondue
+    private boolean answered = false;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class GuessActivity extends AppCompatActivity {
         questionTextView = findViewById(R.id.questionTextView);
         messageTextView = findViewById(R.id.messageTextView);
         answersRadioGroup = findViewById(R.id.radioGroup);
+        progressBar = findViewById(R.id.progressBar);
 
 
         firstRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -72,20 +77,29 @@ public class GuessActivity extends AppCompatActivity {
         });
 
         // Recevoir les flashcards
-        flashCards = getIntent().getParcelableArrayListExtra("flashcards");
-        currentQuestionIndex = 0;
-
-        if (flashCards != null && !flashCards.isEmpty()) {
-            createFlashCard(flashCards.get(currentQuestionIndex));
-        } else {
-            Log.e("GuessActivity", "Aucune flashcard reçue !");
-        }
+        receiveFlashCard();
 
         // Créer les flashcards et afficher la première
         createFlashCard(flashCards.get(currentQuestionIndex));
 
         // Gestion du bouton Valider / Question suivante
         nextStep();
+    }
+
+    /**
+     * Recois et mélange l'ordre des FlashCard
+     */
+    private void receiveFlashCard() {
+        flashCards = getIntent().getParcelableArrayListExtra("flashcards");
+        currentQuestionIndex = 0;
+        // Mélanger les flashcard
+        Collections.shuffle(flashCards);
+
+        if (flashCards != null && !flashCards.isEmpty()) {
+            createFlashCard(flashCards.get(currentQuestionIndex));
+        } else {
+            Log.e("GuessActivity", "Aucune flashcard reçue !");
+        }
     }
 
     /**
@@ -109,6 +123,9 @@ public class GuessActivity extends AppCompatActivity {
 
         // Réinitialiser la sélection correctement
         answersRadioGroup.clearCheck();
+        firstRadioButton.setEnabled(true);
+        secondRadioButton.setEnabled(true);
+        thirdRadioButton.setEnabled(true);
     }
 
     /**
@@ -144,9 +161,14 @@ public class GuessActivity extends AppCompatActivity {
 
             if (answer.isCorrect()) {
                 messageTextView.setText("Bravo, c'était la bonne réponse !");
+                MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.correct);
+                mediaPlayer.start();
+
             } else {
                 messageTextView.setText("Raté, la bonne réponse était : " +
                         flashCard.getAnswers().get(correctIndex).getAnswerText());
+                MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.wrong);
+                mediaPlayer.start();
             }
             return true;
         }
@@ -161,23 +183,35 @@ public class GuessActivity extends AppCompatActivity {
                 // L'utilisateur valide sa réponse
                 boolean hasAnswered = isSelect(); // affiche "Bravo" ou "Raté"
                 if (hasAnswered) { // Seulement si une réponse est cochée
-                    guessButton.setText("Question suivante");
+                    // Si on est sur la dernière question
+                    if (currentQuestionIndex == flashCards.size() - 1) {
+                        guessButton.setText("Félicitations, vous avez terminé le quiz !");
+                        guessButton.setEnabled(false);
+                    } else {
+                        guessButton.setText("Question suivante");
+                    }
+
+                    // Désactivation des réponses
+                    firstRadioButton.setEnabled(false);
+                    secondRadioButton.setEnabled(false);
+                    thirdRadioButton.setEnabled(false);
+                    int progress = (int) (((float) (currentQuestionIndex + 1) / flashCards.size()) * 100);
+                    progressBar.setProgress(progress);
                     answered = true;
                 }
             } else {
                 // L'utilisateur passe à la question suivante
                 currentQuestionIndex++;
+
+
                 if (currentQuestionIndex < flashCards.size()) {
                     createFlashCard(flashCards.get(currentQuestionIndex));
                     guessButton.setText("Valider réponse");
                     messageTextView.setText(""); // vide le message pour la nouvelle question
                     answered = false;
-                } else {
-                    // Fin du quiz
-                    guessButton.setText("Félicitations, vous avez terminé le quiz !");
-                    guessButton.setEnabled(false);
                 }
             }
         });
     }
+
 }
