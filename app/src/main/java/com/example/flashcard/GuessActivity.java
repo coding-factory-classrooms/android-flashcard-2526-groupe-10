@@ -4,7 +4,9 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -43,6 +45,8 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
+
+        // Gestion des marges liées aux system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -84,6 +88,7 @@ public class GuessActivity extends AppCompatActivity {
 
         // Gestion du bouton Valider / Question suivante
         nextStep();
+        mediaExpanded();
     }
 
     /**
@@ -212,6 +217,25 @@ public class GuessActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    /**
+     * Fonction qui lorsque que l'on clique sur characterImageView, characterImageView s'agrandit
+     */
+    public void mediaExpanded() {
+        ImageView characterImage = findViewById(R.id.characterImageView);
+        FrameLayout overlayLayout = findViewById(R.id.overlayLayout);
+        ImageView overlayImage = findViewById(R.id.overlayImageView);
+
+        characterImage.setOnClickListener(view -> {
+            // Copier l'image et afficher l'overlay
+            overlayImage.setImageDrawable(characterImage.getDrawable());
+            overlayLayout.setVisibility(View.VISIBLE);
+        });
+
+        // Fermer l'overlay en cliquant n'importe où dessus
+        overlayLayout.setOnClickListener(v -> overlayLayout.setVisibility(View.GONE));
     }
 
 }
