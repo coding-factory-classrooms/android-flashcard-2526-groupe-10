@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,21 +23,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-        Button playButton = findViewById(R.id.playButtonId);
+        //Bouton pour acceder a la page Guess
+        ImageButton playButton = findViewById(R.id.playButtonId);
         playButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, GuessActivity.class);
             //code inès
             startActivity(intent);
         });
 
-        Button listButton = findViewById(R.id.listButtonId);
+        //Bouton pour acceder a la liste des questions
+        ImageButton listButton = findViewById(R.id.listButtonId);
         listButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ListQuestionActivity.class);
             startActivity(intent);
         });
 
-        Button aboutButton = findViewById(R.id.aboutButtonId);
+        //Bouton pour acceder a la page about
+        ImageButton aboutButton = findViewById(R.id.aboutButtonId);
         aboutButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
