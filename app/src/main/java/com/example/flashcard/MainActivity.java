@@ -1,7 +1,9 @@
 package com.example.flashcard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +20,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+
+
+        Button playButton = findViewById(R.id.playButtonId);
+        playButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, GuessActivity.class);
+            //code inès
+            startActivity(intent);
         });
 
-        Log.d(TAG, "Hello Flashcard");
+        Button listButton = findViewById(R.id.listButtonId);
+        listButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ListQuestionActivity.class);
+            startActivity(intent);
+        });
+
+        Button aboutButton = findViewById(R.id.aboutButtonId);
+        aboutButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        });
     }
 }
