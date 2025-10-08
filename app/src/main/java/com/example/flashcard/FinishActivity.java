@@ -60,6 +60,7 @@ public class FinishActivity extends AppCompatActivity {
         TextView pourcentTextView = findViewById(R.id.pourcentTextView);
         TextView difficultyTextView = findViewById(R.id.difficultyTextView);
 
+
         //Message si 0 de score
         if (resultPlayer == 0){
             String message = "TROP NUL, TOI = 💩";
@@ -82,6 +83,18 @@ public class FinishActivity extends AppCompatActivity {
         backHomeButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        });
+
+
+        // Partager son score
+        findViewById(R.id.sendButton).setOnClickListener(v -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "J'ai obtenu " + scoreTextView.getText() + " au quiz niveau " + difficultyText + " sur l'app FlashCard ! 🎉");
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
         });
 
     }
