@@ -5,52 +5,62 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#341054"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <ImageButton
-        android:id="@+id/listButtonId"
-        android:layout_width="275dp"
-        android:layout_height="235dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Bouton Play"
-        android:scaleType="fitCenter"
-        android:src="@drawable/listbouton"
-        app:layout_constraintBottom_toTopOf="@+id/aboutButtonId"
-        app:layout_constraintEnd_toEndOf="@+id/playButtonId"
-        app:layout_constraintStart_toStartOf="@+id/playButtonId"
-        app:layout_constraintTop_toBottomOf="@+id/playButtonId" />
-
-    <ImageButton
-        android:id="@+id/aboutButtonId"
-        android:layout_width="275dp"
-        android:layout_height="237dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Bouton Play"
-        android:scaleType="fitCenter"
-        android:src="@drawable/aproposbouton2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/playButtonId"
-        app:layout_constraintStart_toStartOf="@+id/playButtonId"
-        app:layout_constraintTop_toBottomOf="@+id/listButtonId" />
-
-    <ImageButton
         android:id="@+id/playButtonId"
-        android:layout_width="301dp"
-        android:layout_height="265dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="60dp"
         android:background="@android:color/transparent"
         android:contentDescription="Bouton Play"
         android:scaleType="fitCenter"
         android:src="@drawable/boutonplay"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/listButtonId"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <Button
+        android:id="@+id/listButtonId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginTop="144dp"
+        android:backgroundTint="#3B82F6"
+        android:elevation="8dp"
+        android:paddingVertical="14dp"
+        android:text="Voir la liste"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:translationZ="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/playButtonId" />
 
+    <Button
+        android:id="@+id/aboutButtonId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#9D4EDD"
+        android:elevation="8dp"
+        android:paddingVertical="14dp"
+        android:text="À propos"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:translationZ="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/listButtonId"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
