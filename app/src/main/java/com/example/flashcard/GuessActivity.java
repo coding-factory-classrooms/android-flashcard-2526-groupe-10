@@ -39,25 +39,11 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
-
-        // Gestion des marges liées aux system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
-        // Recevoir les flashcards
-        flashCards = getIntent().getParcelableArrayListExtra("flashcards");
-        currentQuestionIndex = 0;
-
-        if (flashCards != null && !flashCards.isEmpty()) {
-            createFlashCard(flashCards.get(currentQuestionIndex));
-        } else {
-            Log.e("GuessActivity", "Aucune flashcard reçue !");
-        }
-
 
         // Initialisation des boutons et TextViews
         firstRadioButton = findViewById(R.id.firstRadioButton);
@@ -68,6 +54,7 @@ public class GuessActivity extends AppCompatActivity {
         questionTextView = findViewById(R.id.questionTextView);
         messageTextView = findViewById(R.id.messageTextView);
         answersRadioGroup = findViewById(R.id.radioGroup);
+
 
         firstRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) buttonView.setBackgroundColor(Color.parseColor("#BB9CFF"));
@@ -84,6 +71,15 @@ public class GuessActivity extends AppCompatActivity {
             else buttonView.setBackgroundColor(Color.parseColor("#3B82F6"));
         });
 
+        // Recevoir les flashcards
+        flashCards = getIntent().getParcelableArrayListExtra("flashcards");
+        currentQuestionIndex = 0;
+
+        if (flashCards != null && !flashCards.isEmpty()) {
+            createFlashCard(flashCards.get(currentQuestionIndex));
+        } else {
+            Log.e("GuessActivity", "Aucune flashcard reçue !");
+        }
 
         // Créer les flashcards et afficher la première
         createFlashCard(flashCards.get(currentQuestionIndex));
