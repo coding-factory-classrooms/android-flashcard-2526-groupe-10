@@ -42,6 +42,7 @@ public class GuessActivity extends AppCompatActivity {
     private int correctAnswersCount = 0;
     private String difficulty;
     private ArrayList<FlashCard> wrongAnswers = new ArrayList<>();
+    private long startTime;
 
 
 
@@ -91,6 +92,9 @@ public class GuessActivity extends AppCompatActivity {
 
         // Créer les flashcards et afficher la première
         createFlashCard(flashCards.get(currentQuestionIndex));
+
+        // lancement du chronometre
+        startTime = System.currentTimeMillis();
 
         // Gestion du bouton Valider / Question suivante
         nextStep();
@@ -237,6 +241,9 @@ public class GuessActivity extends AppCompatActivity {
             intent.putExtra("totalQuestions", flashCards.size());
             intent.putExtra("difficulty", difficulty);
             intent.putParcelableArrayListExtra("wrongAnswers", wrongAnswers);
+            long end = System.currentTimeMillis();    // moment de la fin
+            long duration = end - startTime;        // calcul du chrono
+            intent.putExtra("duration", duration);
             startActivity(intent);
             finish();
         });

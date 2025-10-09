@@ -59,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         });
+
+        //Bouton pour acceder aux stats du joueurs
+        Button statsButton = findViewById(R.id.buttonStatsId);
+        statsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, GlobalStats.class);
+            startActivity(intent);
+        });
     }
 
     /**
