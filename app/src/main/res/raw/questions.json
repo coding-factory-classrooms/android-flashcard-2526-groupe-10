@@ -166,5 +166,52 @@
         { "answerText": "Samuel", "isCorrect": false }
       ]
     }
+  ],
+  "hardcore": [
+    {
+      "questionText": "Reconnaissez-vous cette personne célèbre ?",
+      "image": "hardcore_frederic",
+      "answers": [
+        { "answerText": "Frédéric", "isCorrect": true },
+        { "answerText": "Maxime", "isCorrect": false },
+        { "answerText": "Boris", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Nommer cette personne sur la photo",
+      "image": "hardcore_delphine",
+      "answers": [
+        { "answerText": "Delphine", "isCorrect": true },
+        { "answerText": "Valérie", "isCorrect": false },
+        { "answerText": "Robin", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Nommer cette personne sur la photo",
+      "image": "hardcore_robin",
+      "answers": [
+        { "answerText": "Robin", "isCorrect": true },
+        { "answerText": "Maxime", "isCorrect": false },
+        { "answerText": "Frederic", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Nommer cette personne sur la photo",
+      "image": "hardcore_valerie",
+      "answers": [
+        { "answerText": "Delphine", "isCorrect": false },
+        { "answerText": "Valérie", "isCorrect": true },
+        { "answerText": "Frédéric", "isCorrect": false }
+      ]
+    },
+    {
+      "questionText": "Qui est visible ici ?",
+      "image": "hardcore_maxime",
+      "answers": [
+        { "answerText": "Maxime", "isCorrect": true },
+        { "answerText": "Thibaud", "isCorrect": false },
+        { "answerText": "André", "isCorrect": false }
+      ]
+    }
   ]
 }

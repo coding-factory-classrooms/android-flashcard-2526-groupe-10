@@ -7,6 +7,7 @@ public class JsonModels {
     public List<QuestionJson> easy;
     public List<QuestionJson> medium;
     public List<QuestionJson> hard;
+    public List<QuestionJson> hardcore;
 
     public static class QuestionJson {
         public String questionText;
