@@ -32,18 +32,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Bouton pour accéder à GuessActivity
+        // Button to access GuessActivity
         ImageButton playButton = findViewById(R.id.playButtonId);
         playButton.setOnClickListener(view -> showDifficultyDialog());
 
-        // Bouton pour accéder à la liste des questions
+        // Button to access the list of questions
         Button listButton = findViewById(R.id.listButtonId);
         listButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ListQuestionActivity.class);
             startActivity(intent);
         });
 
-        // Bouton About
+        // Button About
         Button aboutButton = findViewById(R.id.aboutButtonId);
         aboutButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, AboutActivity.class);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Affiche la boîte de dialogue pour choisir le niveau de difficulté
+     * Displays the dialog box for choosing the difficulty level
      */
     private void showDifficultyDialog() {
         String[] levels = {"Facile", "Moyen", "Difficile", "Extrême"};
@@ -70,15 +70,16 @@ public class MainActivity extends AppCompatActivity {
                         default: difficulty = "hardcore"; break;
                     }
 
-                    // Charger les flashcards depuis l'API
+                    // Load flashcards from the API
                     loadFlashcardsFromAPI(difficulty);
                 })
+                // To cancel and make the dialog box disappear
                 .setNegativeButton("Annuler", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
     /**
-     * Récupère les flashcards depuis l'API et lance GuessActivity
+     * Retrieves flashcards from the API and launches GuessActivity
      */
     private void loadFlashcardsFromAPI(String difficulty) {
         OkHttpClient client = new OkHttpClient();
@@ -100,13 +101,14 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Récupérer le JSON brut
+                // Retrieve the raw JSON
                 String jsonString = response.body().string();
 
-                // Désérialiser avec Gson dans le modèle JsonModels
+                // Deserializing with Gson in the JsonModels model
                 Type listType = new TypeToken<List<JsonModels.QuestionJson>>() {}.getType();
                 List<JsonModels.QuestionJson> questionsList = new Gson().fromJson(jsonString, listType);
 
+                // Transform in ArrayList<FlashCard>
                 ArrayList<FlashCard> flashCards = new ArrayList<>();
                 for (JsonModels.QuestionJson qj : questionsList) {
                     ArrayList<Answer> answers = new ArrayList<>();
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     flashCards.add(new FlashCard(answers, new Question(qj.questionText, imageResId)));
                 }
 
+                // Launch GuessActivity
                 runOnUiThread(() -> {
                     Intent intent = new Intent(MainActivity.this, GuessActivity.class);
                     intent.putParcelableArrayListExtra("flashcards", flashCards);

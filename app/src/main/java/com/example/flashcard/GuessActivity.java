@@ -44,21 +44,18 @@ public class GuessActivity extends AppCompatActivity {
     private ArrayList<FlashCard> wrongAnswers = new ArrayList<>();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
-        //Recuperation du niveau de difficulte choisi
-        difficulty = getIntent().getStringExtra("difficulty");
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Initialisation des boutons et TextViews
+        // Initializing buttons and TextViews
         firstRadioButton = findViewById(R.id.firstRadioButton);
         secondRadioButton = findViewById(R.id.secondRadioButton);
         thirdRadioButton = findViewById(R.id.thirdRadioButton);
@@ -68,8 +65,6 @@ public class GuessActivity extends AppCompatActivity {
         messageTextView = findViewById(R.id.messageTextView);
         answersRadioGroup = findViewById(R.id.radioGroup);
         progressBar = findViewById(R.id.progressBar);
-
-
 
         firstRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) buttonView.setBackgroundColor(Color.parseColor("#BB9CFF"));
@@ -86,26 +81,30 @@ public class GuessActivity extends AppCompatActivity {
             else buttonView.setBackgroundColor(Color.parseColor("#3B82F6"));
         });
 
-        // Recevoir les flashcards
+        // Recovery of the selected difficulty level
+        difficulty = getIntent().getStringExtra("difficulty");
+
+        // Receive flashcards
         receiveFlashCard();
 
-        // Créer les flashcards et afficher la première
+        // Create flashcards and display the first one
         createFlashCard(flashCards.get(currentQuestionIndex));
 
-        // Gestion du bouton Valider / Question suivante
+        // Management of the Validate/Next Question button
         nextStep();
         mediaExpanded();
     }
 
     /**
-     * Recois et mélange l'ordre des FlashCard
+     * Function that receives and shuffle the order of the FlashCards
      */
     private void receiveFlashCard() {
         flashCards = getIntent().getParcelableArrayListExtra("flashcards");
         currentQuestionIndex = 0;
-        // Mélanger les flashcard
+        // Shuffle the flashcards
         Collections.shuffle(flashCards);
 
+        // Handles “error” cases (empty or null)
         if (flashCards != null && !flashCards.isEmpty()) {
             createFlashCard(flashCards.get(currentQuestionIndex));
         } else {
@@ -114,25 +113,25 @@ public class GuessActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction qui crée la flashcard, mélange ses réponses, et met à jour l'UI
+     * Function that creates the flashcard, shuffles its answers, and updates the UI
      */
     public void createFlashCard(FlashCard flashCard) {
-        // Met à jour la variable de classe
+        // Updates the class variable
         this.flashCard = flashCard;
 
-        // Mélange les réponses
+        // Mix the answers
         Collections.shuffle(flashCard.getAnswers());
 
-        // Mise à jour du texte et de l’image
+        // Update of text and image
         questionTextView.setText(flashCard.getQuestion().getQuestionText());
         characterImageView.setImageResource(flashCard.getQuestion().getCharacterImageId());
 
-        // Mise à jour des RadioButtons
+        // RadioButton update
         firstRadioButton.setText(flashCard.getAnswers().get(0).getAnswerText());
         secondRadioButton.setText(flashCard.getAnswers().get(1).getAnswerText());
         thirdRadioButton.setText(flashCard.getAnswers().get(2).getAnswerText());
 
-        // Réinitialiser la sélection correctement
+        // Reset the selection correctly
         answersRadioGroup.clearCheck();
         firstRadioButton.setEnabled(true);
         secondRadioButton.setEnabled(true);
@@ -140,13 +139,13 @@ public class GuessActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction qui regarde si la bonne réponse a été choisie afin d'afficher le message correspondant
+     * Function that checks whether the correct answer has been selected in order to display the corresponding message
      */
     public boolean isSelect() {
         RadioButton[] radioButtons = {firstRadioButton, secondRadioButton, thirdRadioButton};
         int index = -1;
 
-        // Boucle correcte pour trouver le bouton coché
+        // Correct loop to find the checked button
         for (int i = 0; i < radioButtons.length; i++) {
             if (radioButtons[i].isChecked()) {
                 index = i;
@@ -155,13 +154,13 @@ public class GuessActivity extends AppCompatActivity {
         }
 
         if (index == -1) {
-            // aucun bouton n’est sélectionné
+            // No button is selected
             messageTextView.setText("Il faut choisir une réponse !");
             return false;
         } else {
             Answer answer = flashCard.getAnswers().get(index);
 
-            // Trouver l’index de la bonne réponse
+            // Find the index of the correct answer
             int correctIndex = -1;
             for (int i = 0; i < flashCard.getAnswers().size(); i++) {
                 if (flashCard.getAnswers().get(i).isCorrect()) {
@@ -170,6 +169,8 @@ public class GuessActivity extends AppCompatActivity {
                 }
             }
 
+            // If correct, play the sound, change the message, and increment the score by 1.
+            // Otherwise, play the sound, change the message, and add the question to the list to play it again.
             if (answer.isCorrect()) {
                 messageTextView.setText("Bravo, c'était la bonne réponse !");
                 MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.correct);
@@ -188,15 +189,15 @@ public class GuessActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction qui gère le comportement du bouton : Valider / Question suivante
+     * Function that manages the button behavior: Validate / Next question
      */
     private void nextStep() {
         guessButton.setOnClickListener(v -> {
             if (!answered) {
-                // L'utilisateur valide sa réponse
-                boolean hasAnswered = isSelect(); // affiche "Bravo" ou "Raté"
+                // The user confirms their response
+                boolean hasAnswered = isSelect();
                 if (hasAnswered) { // Seulement si une réponse est cochée
-                    // Si on est sur la dernière question
+                    // If we are on the last question
                     if (currentQuestionIndex == flashCards.size() - 1) {
                         guessButton.setText("Félicitations, vous avez terminé le quiz !");
                         NavigateToFinish();
@@ -204,7 +205,7 @@ public class GuessActivity extends AppCompatActivity {
                         guessButton.setText("Question suivante");
                     }
 
-                    // Désactivation des réponses
+                    // Disabling replies
                     firstRadioButton.setEnabled(false);
                     secondRadioButton.setEnabled(false);
                     thirdRadioButton.setEnabled(false);
@@ -213,13 +214,13 @@ public class GuessActivity extends AppCompatActivity {
                     answered = true;
                 }
             } else {
-                // L'utilisateur passe à la question suivante
+                // The user moves on to the next question.
                 currentQuestionIndex++;
 
                 if (currentQuestionIndex < flashCards.size()) {
                     createFlashCard(flashCards.get(currentQuestionIndex));
                     guessButton.setText("Valider réponse");
-                    messageTextView.setText(""); // vide le message pour la nouvelle question
+                    messageTextView.setText(""); // Clear
                     answered = false;
                 }
             }
@@ -227,8 +228,8 @@ public class GuessActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction qui permet de passer sur l'activité des résultats et qui recupere les resultats, le total des questions,
-     * et le niveau de difficulté choisi
+     * Function that allows you to switch to the results activity and retrieves the results, the total number of questions,
+     * and the selected difficulty level.
      */
     private void NavigateToFinish() {
         guessButton.setOnClickListener(v -> {
@@ -244,20 +245,20 @@ public class GuessActivity extends AppCompatActivity {
 
 
     /**
-     * Fonction qui lorsque que l'on clique sur characterImageView, characterImageView s'agrandit
-     */
+     * Function that enlarges characterImageView when clicked
+     * */
     public void mediaExpanded() {
         ImageView characterImage = findViewById(R.id.characterImageView);
         FrameLayout overlayLayout = findViewById(R.id.overlayLayout);
         ImageView overlayImage = findViewById(R.id.overlayImageView);
 
         characterImage.setOnClickListener(view -> {
-            // Copier l'image et afficher l'overlay
+            // Copy the image and display the overlay
             overlayImage.setImageDrawable(characterImage.getDrawable());
             overlayLayout.setVisibility(View.VISIBLE);
         });
 
-        // Fermer l'overlay en cliquant n'importe où dessus
+        // Close the overlay by clicking anywhere on it
         overlayLayout.setOnClickListener(v -> overlayLayout.setVisibility(View.GONE));
     }
 

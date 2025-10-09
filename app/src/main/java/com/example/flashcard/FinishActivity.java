@@ -20,25 +20,24 @@ public class FinishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_finish);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
+//
 
+        //// HERE : Comments in french by Ouali to better communication with the team
 
-        // Recupere les infos depuis les autres activity
+        // Récupère les infos depuis les autres activity
         Intent srcIntent = getIntent();
         int resultPlayer = srcIntent.getIntExtra("resultPlayer", 0);
         int totalQuestions = getIntent().getIntExtra("totalQuestions", 0);
         String choiceDifficulty = srcIntent.getStringExtra("difficulty");
         ArrayList<FlashCard> wrongAnswers = getIntent().getParcelableArrayListExtra("wrongAnswers");
 
+        // Bouton pour refaire les flashcard erronés si la liste n'est pas vide / null
         Button reviseButton = findViewById(R.id.reviseButton);
         if (wrongAnswers == null || wrongAnswers.isEmpty()) {
             reviseButton.setEnabled(false);
             reviseButton.setBackgroundColor(Color.GRAY);
         } else {
+            // Relance l'activity de jeu
             reviseButton.setEnabled(true);
             reviseButton.setOnClickListener(v -> {
                 Intent intent = new Intent(FinishActivity.this, GuessActivity.class);
