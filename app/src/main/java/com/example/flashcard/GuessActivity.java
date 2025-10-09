@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,8 @@ public class GuessActivity extends AppCompatActivity {
     private String difficulty;
     private ArrayList<FlashCard> wrongAnswers = new ArrayList<>();
     private long startTime;
+    private TextView timerTextView;
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -50,6 +54,12 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_guess);
+        timerTextView = findViewById(R.id.timerTextViewId);
+
+        // Initialisation du chronomètre de la partie
+        startTime = System.currentTimeMillis();
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -82,8 +92,25 @@ public class GuessActivity extends AppCompatActivity {
             else buttonView.setBackgroundColor(Color.parseColor("#3B82F6"));
         });
 
+
         // Recovery of the selected difficulty level
         difficulty = getIntent().getStringExtra("difficulty");
+
+        //Récupère la durée correspondant à la difficulté
+        long quizDuration = getQuizDuration(difficulty);
+
+
+        //Sécuriter, désactivé le chronometre en mode revision
+        boolean isRevisionMode = getIntent().getBooleanExtra("isRevisionMode", false);
+
+        if (!isRevisionMode) {
+            // Lance le chronomètre
+            startQuizTimer(quizDuration);
+        } else {
+            //Arret du chronometre
+            timerTextView.setVisibility(View.GONE);
+            timerTextView = null;
+        }
 
         // Receive flashcards
         receiveFlashCard();
@@ -246,6 +273,10 @@ public class GuessActivity extends AppCompatActivity {
             long end = System.currentTimeMillis();    // moment de la fin
             long duration = end - startTime;        // calcul du chrono
             intent.putExtra("duration", duration);
+            //Arret du timer
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
             startActivity(intent);
             finish();
         });
@@ -269,5 +300,60 @@ public class GuessActivity extends AppCompatActivity {
         // Close the overlay by clicking anywhere on it
         overlayLayout.setOnClickListener(v -> overlayLayout.setVisibility(View.GONE));
     }
+
+
+    /**
+     * Function that adapts the stopwatch according to the chosen difficulty
+     * */
+    private long getQuizDuration(String difficulty) {
+        switch (difficulty) {
+            case "easy":
+                return 60000; // 60 secondes
+            case "medium":
+                return 50000; // 50 secondes
+            case "hard":
+                return 40000; // 40 secondes
+            case "hardcore":
+                return 30000; // 30 secondes
+            default:
+                return 60000;
+        }
+    }
+
+    /**
+     * Functions that start and stop the timer, while keeping the player’s stats of the game
+     * */
+    private void startQuizTimer(long quizDuration) {
+        countDownTimer = new CountDownTimer(quizDuration, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long seconds = millisUntilFinished / 1000;
+                timerTextView.setText("⏱ " + seconds + " s");
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(GuessActivity.this, "⏰ Temps imparti écoulé !", Toast.LENGTH_SHORT).show();
+
+                // Empêche double lancement si déjà fini manuellement
+                if (isFinishing()) return;
+
+                Intent intent = new Intent(GuessActivity.this, FinishActivity.class);
+                intent.putExtra("resultPlayer", correctAnswersCount);
+                intent.putExtra("totalQuestions", flashCards.size());
+                intent.putExtra("difficulty", difficulty);
+                intent.putParcelableArrayListExtra("wrongAnswers", wrongAnswers);
+
+                long end = System.currentTimeMillis();
+                long duration = end - startTime;
+                intent.putExtra("duration", duration);
+
+                startActivity(intent);
+                finish();
+            }
+        }.start();
+    }
+
+
 
 }
