@@ -37,7 +37,6 @@ public class FinishActivity extends AppCompatActivity {
         String choiceDifficulty = srcIntent.getStringExtra("difficulty");
         ArrayList<FlashCard> wrongAnswers = getIntent().getParcelableArrayListExtra("wrongAnswers");
 
-        // Bouton pour refaire les flashcard erronés si la liste n'est pas vide / null
 
         //Mettre a jours les stats du joueurs
         long duration = srcIntent.getLongExtra("duration", 0); // récupéré depuis GuessActivity
@@ -55,6 +54,7 @@ public class FinishActivity extends AppCompatActivity {
         writeStats(this, stats);
 
 
+        // Bouton pour refaire les flashcard erronés si la liste n'est pas vide / null
         Button reviseButton = findViewById(R.id.reviseButton);
         if (wrongAnswers == null || wrongAnswers.isEmpty()) {
             reviseButton.setEnabled(false);

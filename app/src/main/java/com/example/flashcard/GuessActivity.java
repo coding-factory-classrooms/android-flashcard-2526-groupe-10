@@ -118,11 +118,11 @@ public class GuessActivity extends AppCompatActivity {
         // Create flashcards and display the first one
         createFlashCard(flashCards.get(currentQuestionIndex));
 
-        // Management of the Validate/Next Question button
+
         // lancement du chronometre
         startTime = System.currentTimeMillis();
 
-        // Gestion du bouton Valider / Question suivante
+        // Management of the Validate/Next Question button
         nextStep();
         mediaExpanded();
     }
