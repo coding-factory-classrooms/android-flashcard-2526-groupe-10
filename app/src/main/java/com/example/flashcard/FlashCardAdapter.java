@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,12 @@ public class FlashCardAdapter extends RecyclerView.Adapter<FlashCardAdapter.View
         }
         holder.textAnswers.setText(answers.toString().trim());
 
-
+        // 🔽 AJOUTE CE BLOC JUSTE ICI 🔽
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, FlashCardDetailActivity.class);
+            intent.putExtra("flashcard", flashCard);
+            context.startActivity(intent);
+        });
     }
 
     @Override

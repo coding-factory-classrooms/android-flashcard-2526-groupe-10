@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Flashcard">
         <activity
+            android:name=".FlashCardDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".GlobalStats"
             android:exported="false" />
         <activity
@@ -34,8 +37,7 @@
         </activity>
         <activity
             android:name=".GuessActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>

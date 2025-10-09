@@ -28,6 +28,7 @@ import java.util.List;
 
 public class GuessActivity extends AppCompatActivity {
 
+
     private RadioButton firstRadioButton;
     private RadioButton secondRadioButton;
     private RadioButton thirdRadioButton;
@@ -131,12 +132,20 @@ public class GuessActivity extends AppCompatActivity {
      * Function that receives and shuffle the order of the FlashCards
      */
     private void receiveFlashCard() {
+        // Essaye de récupérer une liste de cartes
         flashCards = getIntent().getParcelableArrayListExtra("flashcards");
-        currentQuestionIndex = 0;
-        // Shuffle the flashcards
-        Collections.shuffle(flashCards);
 
-        // Handles “error” cases (empty or null)
+        if (flashCards == null || flashCards.isEmpty()) {
+            // Sinon, essaye de récupérer une seule FlashCard
+            FlashCard singleCard = getIntent().getParcelableExtra("flashcard");
+            flashCards = new ArrayList<>();
+            if (singleCard != null) {
+                flashCards.add(singleCard);
+            }
+        }
+
+        currentQuestionIndex = 0;
+
         if (flashCards != null && !flashCards.isEmpty()) {
             createFlashCard(flashCards.get(currentQuestionIndex));
         } else {
