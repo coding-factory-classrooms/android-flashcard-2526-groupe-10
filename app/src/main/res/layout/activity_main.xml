@@ -63,15 +63,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonStatsId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_width="37dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
-        android:text="Stats"
+        android:background="@drawable/bar_chart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.606"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/playButtonId"
         app:layout_constraintTop_toTopOf="parent" />
 

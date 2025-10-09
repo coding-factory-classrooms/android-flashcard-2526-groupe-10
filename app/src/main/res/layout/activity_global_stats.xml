@@ -156,7 +156,7 @@
         android:layout_marginTop="26dp"
         android:layout_marginBottom="103dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Reset"
+        android:text="Réinitialiser"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/homeBackButtonId"
         app:layout_constraintStart_toStartOf="@+id/homeBackButtonId"
