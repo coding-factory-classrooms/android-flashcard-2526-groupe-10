@@ -39,9 +39,14 @@ public class MainActivity extends AppCompatActivity {
         // Button to access the list of questions
         Button listButton = findViewById(R.id.listButtonId);
         listButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ListQuestionActivity.class);
-            startActivity(intent);
+            ArrayList<FlashCard> allFlashcards = new ArrayList<>();
+
+            loadFlashcardsForList("easy", allFlashcards);
+            loadFlashcardsForList("medium", allFlashcards);
+            loadFlashcardsForList("hard", allFlashcards);
+            loadFlashcardsForList("hardcore", allFlashcards);
         });
+
 
         // Button About
         Button aboutButton = findViewById(R.id.aboutButtonId);
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
      * Displays the dialog box for choosing the difficulty level
      */
     private void showDifficultyDialog() {
-        String[] levels = {"Facile", "Moyen", "Difficile", "Extrême"};
+        String[] levels = {"Easy", "Medium", "Hard", "Hardcore"};
 
         new AlertDialog.Builder(this)
                 .setTitle("Choisissez un niveau de difficulté")
@@ -136,4 +141,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    /**
+     * Retrieves flashcards from the API and launches ListQuestionActivity
+     */
+    private void loadFlashcardsForList(String difficulty, ArrayList<FlashCard> allFlashcards) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://students.gryt.tech/api/L2/codeguess/?level=" + difficulty)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Erreur réseau (" + difficulty + "): " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "Réponse non valide (" + difficulty + "): " + response.code());
+                    return;
+                }
+
+                String jsonString = response.body().string();
+                Type listType = new TypeToken<List<JsonModels.QuestionJson>>() {}.getType();
+                List<JsonModels.QuestionJson> questionsList = new Gson().fromJson(jsonString, listType);
+
+                ArrayList<FlashCard> flashCards = new ArrayList<>();
+                for (JsonModels.QuestionJson qj : questionsList) {
+                    ArrayList<Answer> answers = new ArrayList<>();
+                    for (JsonModels.AnswerJson aj : qj.answers) {
+                        answers.add(new Answer(aj.answerText, aj.isCorrect));
+                    }
+                    int imageResId = getResources().getIdentifier(qj.image, "drawable", getPackageName());
+                    flashCards.add(new FlashCard(answers, new Question(qj.questionText, imageResId)));
+                }
+
+                synchronized (allFlashcards) {
+                    allFlashcards.addAll(flashCards);
+
+                    // If we have reached the 4 sets of questions
+                    if (allFlashcards.size() > 0 && allFlashcards.size() >= 20) {
+                        runOnUiThread(() -> {
+                            Intent intent = new Intent(MainActivity.this, ListQuestionActivity.class);
+                            intent.putParcelableArrayListExtra("flashcards", allFlashcards);
+                            startActivity(intent);
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
 }
