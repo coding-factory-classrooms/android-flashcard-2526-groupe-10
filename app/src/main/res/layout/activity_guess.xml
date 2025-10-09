@@ -169,5 +169,18 @@
             app:srcCompat="@drawable/coding"/>
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/timerTextViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:text="02:00"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

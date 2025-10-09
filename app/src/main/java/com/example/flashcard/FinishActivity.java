@@ -66,6 +66,7 @@ public class FinishActivity extends AppCompatActivity {
                 Intent intent = new Intent(FinishActivity.this, GuessActivity.class);
                 intent.putParcelableArrayListExtra("flashcards", wrongAnswers);
                 intent.putExtra("difficulty", getIntent().getStringExtra("difficulty"));
+                intent.putExtra("isRevisionMode", true);
                 startActivity(intent);
                 finish();
             });
