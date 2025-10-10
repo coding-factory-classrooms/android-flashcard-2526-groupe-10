@@ -8,9 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Intent;
 
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlashCardAdapter extends RecyclerView.Adapter<FlashCardAdapter.ViewHolder> {
@@ -61,11 +63,20 @@ public class FlashCardAdapter extends RecyclerView.Adapter<FlashCardAdapter.View
         }
         holder.textAnswers.setText(answers.toString().trim());
 
-        // 🔽 AJOUTE CE BLOC JUSTE ICI 🔽
+        //Ajout du clic sur la carte
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, FlashCardDetailActivity.class);
-            intent.putExtra("flashcard", flashCard);
+            Intent intent = new Intent(context, GuessActivity.class);
+            ArrayList<FlashCard> singleFlashcardList = new ArrayList<>();
+            singleFlashcardList.add(flashCard);
+
+            // On passe la carte sélectionnée dans l’intent
+            intent.putParcelableArrayListExtra("flashcards", singleFlashcardList);
+
+            // On peut mettre un niveau par défaut si tu veux (sinon optionnel)
+            intent.putExtra("difficulty", "Solo");
+
             context.startActivity(intent);
+
         });
     }
 
