@@ -56,7 +56,7 @@ public class GuessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guess);
         timerTextView = findViewById(R.id.timerTextViewId);
 
-        // Initialisation du chronomètre de la partie
+        // Initializing the game timer
         startTime = System.currentTimeMillis();
 
 
@@ -96,18 +96,20 @@ public class GuessActivity extends AppCompatActivity {
         // Recovery of the selected difficulty level
         difficulty = getIntent().getStringExtra("difficulty");
 
-        //Récupère la durée correspondant à la difficulté
+        //Retrieves the duration corresponding to the difficulty
         long quizDuration = getQuizDuration(difficulty);
 
 
-        //Sécuriter, désactivé le chronometre en mode revision
+        //Secure, disabled the timer in review mode
         boolean isRevisionMode = getIntent().getBooleanExtra("isRevisionMode", false);
+        boolean isSoloMode = "Solo".equals(difficulty);
 
-        if (!isRevisionMode) {
-            // Lance le chronomètre
+
+        if (!isRevisionMode && !isSoloMode) {
+            // Start the stopwatch
             startQuizTimer(quizDuration);
         } else {
-            //Arret du chronometre
+            //Stop the stopwatch
             timerTextView.setVisibility(View.GONE);
             timerTextView = null;
         }
@@ -119,7 +121,7 @@ public class GuessActivity extends AppCompatActivity {
         createFlashCard(flashCards.get(currentQuestionIndex));
 
 
-        // lancement du chronometre
+        // starting the stopwatch
         startTime = System.currentTimeMillis();
 
         // Management of the Validate/Next Question button
@@ -228,7 +230,7 @@ public class GuessActivity extends AppCompatActivity {
             if (!answered) {
                 // The user confirms their response
                 boolean hasAnswered = isSelect();
-                if (hasAnswered) { // Seulement si une réponse est cochée
+                if (hasAnswered) { // Only if an answer is checked
                     // If we are on the last question
                     if (currentQuestionIndex == flashCards.size() - 1) {
                         guessButton.setText("Félicitations, vous avez terminé le quiz !");
@@ -265,15 +267,16 @@ public class GuessActivity extends AppCompatActivity {
      */
     private void NavigateToFinish() {
         guessButton.setOnClickListener(v -> {
+            // Send to activity results
             Intent intent = new Intent(this, FinishActivity.class);
             intent.putExtra("resultPlayer", correctAnswersCount);
             intent.putExtra("totalQuestions", flashCards.size());
             intent.putExtra("difficulty", difficulty);
             intent.putParcelableArrayListExtra("wrongAnswers", wrongAnswers);
-            long end = System.currentTimeMillis();    // moment de la fin
-            long duration = end - startTime;        // calcul du chrono
+            long end = System.currentTimeMillis();    // end time
+            long duration = end - startTime;        // chrono calculation
             intent.putExtra("duration", duration);
-            //Arret du timer
+            //timer stop
             if (countDownTimer != null) {
                 countDownTimer.cancel();
             }
@@ -315,6 +318,8 @@ public class GuessActivity extends AppCompatActivity {
                 return 40000; // 40 secondes
             case "hardcore":
                 return 30000; // 30 secondes
+            case "Solo":
+                return 10000;
             default:
                 return 60000;
         }
@@ -335,7 +340,7 @@ public class GuessActivity extends AppCompatActivity {
             public void onFinish() {
                 Toast.makeText(GuessActivity.this, "⏰ Temps imparti écoulé !", Toast.LENGTH_SHORT).show();
 
-                // Empêche double lancement si déjà fini manuellement
+                // Prevents double launch if already finished manually
                 if (isFinishing()) return;
 
                 Intent intent = new Intent(GuessActivity.this, FinishActivity.class);

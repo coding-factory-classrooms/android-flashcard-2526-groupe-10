@@ -20,7 +20,7 @@ public class JsonStatsModel {
     public void setTotalTime(long totalTime) { this.totalTime = totalTime; }
 
 
-    // Méthode pour calculer le temps moyen passé par partie
+    // Method for calculating the average time spent per game
     public float getAverageTime() {
         return totalGames == 0 ? 0 : (float) totalTime / totalGames;
     }

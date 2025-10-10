@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //Bouton pour acceder aux stats du joueurs
+        // Button to access player stats
         ImageButton statsButton = findViewById(R.id.buttonStatsId);
         statsButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, GlobalStats.class);

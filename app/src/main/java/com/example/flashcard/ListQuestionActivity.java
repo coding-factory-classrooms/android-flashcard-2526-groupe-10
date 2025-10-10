@@ -20,16 +20,18 @@ public class ListQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_question);
 
+        // Get the RecyclerView from MainActivity
         RecyclerView recyclerView = findViewById(R.id.my_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         ArrayList<FlashCard> flashcards = getIntent().getParcelableArrayListExtra("flashcards");
 
+        // If flashcards are null, create an empty list
         if (flashcards == null) {
             Log.e("ListQuestionActivity", "flashcards est null !");
             flashcards = new ArrayList<>();
         }
 
+        // Create and set the adapter for the RecyclerView
         FlashCardAdapter adapter = new FlashCardAdapter(this, flashcards);
         recyclerView.setAdapter(adapter);
     }
